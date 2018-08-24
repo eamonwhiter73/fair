@@ -1,9 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { Icon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import InventoryList from './InventoryList';
+import LogIn from './LogIn';
+
 
 export default class Inventory extends React.Component {
 
@@ -13,10 +16,41 @@ export default class Inventory extends React.Component {
     this.authSubscription = null;
   }
 
-  static navigationOptions = {
-    title: 'Inventory Control',
-    headerLeft: null,
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'Inventory Control',
+      headerLeft: null,
+      headerRight: (
+        <Icon name={'exit-to-app'}
+              onPress={() => {
+                Alert.alert(
+                  'Logout',
+                  'Are you sure you want to logout?',
+                  [
+                    {text: 'Cancel', onPress: () => {
+                      console.log("Canceled Logout.")
+                    }},
+                    {text: 'OK', onPress: () => {
+
+                      firebase.auth().signOut()
+                        .then(() => { 
+                          navigation.navigate('LogIn');
+                        })
+                        .catch(err => {
+                          Alert.alert(err);
+                        })  
+                      
+                    }},
+                  ],
+                  { cancelable: false }
+                )
+              }}
+              iconStyle={{marginRight: 11, fontSize: 30, color: '#518dff'}}
+        />
+      ),
+      headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+      headerStyle: {backgroundColor: '#ddeaff'}
+    }
   };
 
   state = {
@@ -25,7 +59,11 @@ export default class Inventory extends React.Component {
     quantity: "",
     description: "",
     loading: true
-  };
+  }
+
+  leave = () => {
+    
+  }
 
   changeData = (data) => {
     if (data != null) {
@@ -82,10 +120,13 @@ export default class Inventory extends React.Component {
 
   componentWillMount() {
     this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
-      this.setState({
-        loading: false,
-        user,
-      });
+
+      if(user) {
+        this.setState({
+          loading: false,
+          user,
+        });
+      }
     });
   }
 
@@ -101,7 +142,7 @@ export default class Inventory extends React.Component {
 
   myCallback = (item) => {
     console.log("myCallback getting called-----------------------");
-    if (item.email == this.state.user.email) {
+    if (this.state.user && item.email == this.state.user.email) {
         console.log("email = email !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return ( 
           <View style={{flex: 1, flexDirection: 'row'}}>
@@ -111,7 +152,7 @@ export default class Inventory extends React.Component {
               onPress={() => { 
                 this.edit(item)
               }}>
-              <Text style = {styles.button}>EDIT</Text>
+              <Text style = {styles.buttonTextAdjust}>EDIT</Text>
             </TouchableOpacity>
           </View>
         )
@@ -122,11 +163,16 @@ export default class Inventory extends React.Component {
   }
  
   returnEmail = () => {
-    return this.state.user.email
+    if(this.state.user != null) {
+      return this.state.user.email
+    }
+    else {
+      return "";
+    }
   }
 
   searchSkuFunc = () => {
-    if(this.props.navigation.state.params.mode == 'forSearch') {
+    if(this.props.navigation.state.params && this.props.navigation.state.params.mode == 'forSearch') {
       return this.props.navigation.state.params.skuForSearch;
     }
     
@@ -138,7 +184,7 @@ export default class Inventory extends React.Component {
     if (this.state.loading) return null;
 
     return (
-      <View style={{paddingTop: 15, paddingHorizontal: 15, paddingBottom: 15, flex: 1}}>
+      <View style={{paddingTop: 15, paddingHorizontal: 15, paddingBottom: 15, flex: 1, backgroundColor: "#fff"}}>
         <View style={{flex: 1}}>
           <TouchableOpacity
             style = {styles.container}
@@ -203,7 +249,7 @@ const styles = StyleSheet.create ({
    container: {
       flexDirection: 'row',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
    },
    sellcontainer: {
       flexDirection: 'row',
@@ -220,10 +266,24 @@ const styles = StyleSheet.create ({
    button: {
       borderWidth: 1,
       padding: 10,
-      borderColor: 'black',
+      borderColor: '#357aff',
+      borderRadius: 4,
       flex: 1,
       textAlign: 'center',
-      color: 'blue',
-      backgroundColor: '#aaa'
+      color: '#518dff',
+      backgroundColor: '#ddeaff',
+      fontFamily: 'American Typewriter',
+      fontWeight: 'bold'
+   },
+   buttonTextAdjust: {
+      borderWidth: 1,
+      padding: 10,
+      borderColor: '#357aff',
+      borderRadius: 4,
+      flex: 1,
+      textAlign: 'center',
+      color: '#518dff',
+      backgroundColor: '#ddeaff',
+      fontFamily: 'American Typewriter',
    },
 })

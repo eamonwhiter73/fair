@@ -5,8 +5,9 @@ import firebase from 'react-native-firebase';
 export default class SignUp extends React.Component {
 
   static navigationOptions = {
-    title: 'Sign Up',
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+    headerTitle: 'Sign Up',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
   };
 
   state = {

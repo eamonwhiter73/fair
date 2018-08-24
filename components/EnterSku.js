@@ -5,8 +5,9 @@ import firebase from 'react-native-firebase';
 export default class EnterSku extends React.Component {
 
   static navigationOptions = {
-    title: 'Enter SKU',
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+    headerTitle: 'Enter SKU',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
   };
 
   state = {

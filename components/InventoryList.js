@@ -167,7 +167,7 @@ export default class InventoryList extends React.Component {
     return (
       <View style={{marginTop: 15, flex: 0.99}}>
         <View style={{flexDirection: 'row', marginBottom: 10}}>
-          <Text style={{flex: 1, fontWeight: 'bold', textDecorationLine: 'underline', fontSize: 16, textAlign: 'center'}}>Inventory</Text>
+          <Text style={{color: '#518dff', fontFamily: 'American Typewriter', flex: 1, fontWeight: 'bold', fontSize: 18, textAlign: 'center'}}>Inventory</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <SearchBar
@@ -176,8 +176,11 @@ export default class InventoryList extends React.Component {
           onClear={this.clear.bind(this)}
           onSubmitEditing={this.search.bind(this)}
           placeholder='Search SKU or Description...'
-          containerStyle={{flex: 1}}
+          containerStyle={{flex: 1, borderRadius: 4, backgroundColor: '#ddeaff', borderTopColor: '#357aff', borderBottomColor: '#357aff', borderWidth: 1, borderColor: '#357aff', borderStyle: 'solid'}}
+          inputStyle={{backgroundColor: '#ffffff'}}
           value={this.state.searchText}
+          lightTheme={true}
+          placeholderTextColor='#dddddd'
           />
           <TouchableOpacity
             style = {styles.editcontainer}
@@ -206,11 +209,14 @@ const styles = StyleSheet.create ({
    buttonEdit: {
       borderWidth: 1,
       padding: 15,
-      borderColor: 'black',
+      borderColor: '#357aff',
+      borderRadius: 4,
       flex: 1,
       textAlign: 'center',
-      color: 'blue',
-      backgroundColor: '#aaa'
+      color: '#518dff',
+      backgroundColor: '#ddeaff',
+      fontFamily: 'American Typewriter',
+      fontWeight: 'bold'
    },
    button: {
       borderWidth: 1,

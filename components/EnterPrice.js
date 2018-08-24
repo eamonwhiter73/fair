@@ -4,8 +4,9 @@ import { StyleSheet, Text, TextInput, View, Button, Linking, Platform, Alert } f
 export default class EnterPrice extends React.Component {
 
   static navigationOptions = {
-    title: 'Enter Price',
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+    headerTitle: 'Enter Price',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
   };
 
   state = {

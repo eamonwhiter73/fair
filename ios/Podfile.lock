@@ -1,13 +1,13 @@
 PODS:
-  - BoringSSL (10.0.5):
-    - BoringSSL/Implementation (= 10.0.5)
-    - BoringSSL/Interface (= 10.0.5)
-  - BoringSSL/Implementation (10.0.5):
-    - BoringSSL/Interface (= 10.0.5)
-  - BoringSSL/Interface (10.0.5)
-  - Crashlytics (3.10.4):
-    - Fabric (~> 1.7.9)
-  - Fabric (1.7.9)
+  - BoringSSL (10.0.6):
+    - BoringSSL/Implementation (= 10.0.6)
+    - BoringSSL/Interface (= 10.0.6)
+  - BoringSSL/Implementation (10.0.6):
+    - BoringSSL/Interface (= 10.0.6)
+  - BoringSSL/Interface (10.0.6)
+  - Crashlytics (3.10.7):
+    - Fabric (~> 1.7.11)
+  - Fabric (1.7.11)
   - Firebase/AdMob (5.3.0):
     - Firebase/Core
     - Google-Mobile-Ads-SDK (= 7.31.0)
@@ -119,35 +119,44 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.4)
   - GoogleToolboxForMac/NSData+zlib (2.1.4):
     - GoogleToolboxForMac/Defines (= 2.1.4)
-  - gRPC (1.13.0):
-    - gRPC-RxLibrary (= 1.13.0)
-    - gRPC/Main (= 1.13.0)
-  - gRPC-Core (1.13.0):
-    - gRPC-Core/Implementation (= 1.13.0)
-    - gRPC-Core/Interface (= 1.13.0)
-  - gRPC-Core/Implementation (1.13.0):
+  - gRPC (1.14.1):
+    - gRPC-RxLibrary (= 1.14.1)
+    - gRPC/Main (= 1.14.1)
+  - gRPC-Core (1.14.1):
+    - gRPC-Core/Implementation (= 1.14.1)
+    - gRPC-Core/Interface (= 1.14.1)
+  - gRPC-Core/Implementation (1.14.1):
     - BoringSSL (~> 10.0)
-    - gRPC-Core/Interface (= 1.13.0)
+    - gRPC-Core/Interface (= 1.14.1)
     - nanopb (~> 0.3)
-  - gRPC-Core/Interface (1.13.0)
-  - gRPC-ProtoRPC (1.13.0):
-    - gRPC-ProtoRPC/Main (= 1.13.0)
-  - gRPC-ProtoRPC/Main (1.13.0):
-    - gRPC (= 1.13.0)
-    - gRPC-RxLibrary (= 1.13.0)
+  - gRPC-Core/Interface (1.14.1)
+  - gRPC-ProtoRPC (1.14.1):
+    - gRPC-ProtoRPC/Main (= 1.14.1)
+  - gRPC-ProtoRPC/Main (1.14.1):
+    - gRPC (= 1.14.1)
+    - gRPC-RxLibrary (= 1.14.1)
     - Protobuf (~> 3.0)
-  - gRPC-RxLibrary (1.13.0)
-  - gRPC/Main (1.13.0):
-    - gRPC-Core (= 1.13.0)
-    - gRPC-RxLibrary (= 1.13.0)
-  - GTMSessionFetcher/Core (1.1.15)
+  - gRPC-RxLibrary (1.14.1)
+  - gRPC/Main (1.14.1):
+    - gRPC-Core (= 1.14.1)
+    - gRPC-RxLibrary (= 1.14.1)
+  - GTMSessionFetcher/Core (1.2.0)
   - leveldb-library (1.20)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - Protobuf (3.6.0)
+  - Protobuf (3.6.1)
+  - React (0.55.4):
+    - React/Core (= 0.55.4)
+  - React/Core (0.55.4):
+    - yoga (= 0.55.4.React)
+  - RNDeviceInfo (0.21.5):
+    - React
+  - RNVectorIcons (5.0.0):
+    - React
+  - yoga (0.55.4.React)
 
 DEPENDENCIES:
   - Crashlytics (~> 3.10.4)
@@ -164,11 +173,25 @@ DEPENDENCIES:
   - Firebase/Performance (~> 5.3.0)
   - Firebase/RemoteConfig (~> 5.3.0)
   - Firebase/Storage (~> 5.3.0)
+  - React/Core (from `../node_modules/react-native`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: ../node_modules/react-native
+  RNDeviceInfo:
+    :path: ../node_modules/react-native-device-info
+  RNVectorIcons:
+    :path: ../node_modules/react-native-vector-icons
+  yoga:
+    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
-  BoringSSL: cf3f1793eb6e3c445c4d150456341f149c268a35
-  Crashlytics: 915a7787b84f635fb2a81f92a90e265c2c413f76
-  Fabric: a2917d3895e4c1569b9c3170de7320ea1b1e6661
+  BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
+  Crashlytics: ccaac42660eb9351b9960c0d66106b0bcf99f4fa
+  Fabric: f233c9492b3bbc1f04e3882986740f7988a58edb
   Firebase: 68afeeb05461db02d7c9e3215cda28068670f4aa
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
   FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
@@ -187,15 +210,19 @@ SPEC CHECKSUMS:
   FirebaseSwizzlingUtilities: 6c22677c50d0b6f5f0dc637c1233f13694a3003f
   Google-Mobile-Ads-SDK: 6e529e748b45507a2ca904e0b5a52669ba3920c4
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
-  gRPC: 81b990caa01d7c32605d300c2ffd1b5ba0ef9e49
-  gRPC-Core: a56b086a8ef5ced6f6ba5be5bc0a63fca185015a
-  gRPC-ProtoRPC: 842797fbe05dfcf891afb4a5048e5ccf5f06ef86
-  gRPC-RxLibrary: fa6852f98d6ec0b73c0ec2f6406c26943099d501
-  GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
+  gRPC: 65fa2a50c4fd61940b76f4962d75c239c92c6a8d
+  gRPC-Core: e3ace1e1161e75903135de8d8231bb69c9d35721
+  gRPC-ProtoRPC: 78f976fc6a1eafc0e1f4965c255c313aa0859b1e
+  gRPC-RxLibrary: c4c826507ad3c8c8fab6887f153938eb04b86d59
+  GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
+  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  React: aa2040dbb6f317b95314968021bd2888816e03d5
+  RNDeviceInfo: 568c5641057313b4912d08a7742ff0b2f753ed5c
+  RNVectorIcons: c0dbfbf6068fefa240c37b0f71bd03b45dddac44
+  yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: e6d7a70446520929c99404aad6b659970b78b3da
+PODFILE CHECKSUM: a6eba11d5d35b570eaed58f5674d424bd4b4f596
 
 COCOAPODS: 1.4.0

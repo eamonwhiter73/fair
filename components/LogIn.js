@@ -5,8 +5,9 @@ import firebase from 'react-native-firebase';
 export default class LogIn extends React.Component {
 
   static navigationOptions = {
-    title: 'Log In',
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+    headerTitle: 'Log In',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
   };
 
   state = {
@@ -28,7 +29,7 @@ export default class LogIn extends React.Component {
     }
     else {
       firebase.auth().signInAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
-        navigate('Inventory');
+        navigate('Inventory', { mode: 'fromLogIn' });
       });
     }
   }
@@ -44,7 +45,7 @@ export default class LogIn extends React.Component {
       if (this.state.user) {
         const { navigate } = this.props.navigation;
 
-        navigate('Inventory');
+        navigate('Inventory', { mode: 'fromLogIn' });
       }
     });
   }
@@ -58,19 +59,19 @@ export default class LogIn extends React.Component {
     if (this.state.loading) return null;
 
     return (
-      <View style={{paddingHorizontal: 15}}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{marginTop: 25}}>Email: </Text>
+      <View style={{paddingHorizontal: 15, backgroundColor: '#ddeaff'}}>
+        <View style={{}}>
+          <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Email: </Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 1, marginTop: 15, backgroundColor: '#ffffff'}}
+            style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff'}}
             onChangeText={(text) => this.setState({email: text})}
             value={this.state.email}
           />
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{marginTop: 25}}>Password: </Text>
+        <View style={{}}>
+          <Text style={{marginTop: 15, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Password: </Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 1, marginTop: 15, backgroundColor: '#ffffff'}}
+            style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff'}}
             onChangeText={(text) => this.setState({password: text})}
             value={this.state.password}
             onSubmitEditing={this.submitEdit}
@@ -104,7 +105,9 @@ const styles = StyleSheet.create ({
       borderColor: 'black',
       flex: 1,
       textAlign: 'center',
-      color: 'blue',
-      backgroundColor: '#aaa'
+      color: 'white',
+      fontFamily: 'American Typewriter',
+      backgroundColor: '#518dff'
+
    }
 })

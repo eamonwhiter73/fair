@@ -24,7 +24,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string></string>
+			<string/>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>square-commerce-v1</string>
@@ -49,7 +49,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Need for barcode scanning.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Need to save pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

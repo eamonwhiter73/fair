@@ -6,8 +6,9 @@ import firebase from 'react-native-firebase';
 export default class EditItem extends React.Component {
 
   static navigationOptions = {
-    title: 'Edit Item',
-    headerTitleStyle: {textAlign: 'center', flex: 1},
+    headerTitle: 'Edit Item',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
   };
 
   constructor() {
