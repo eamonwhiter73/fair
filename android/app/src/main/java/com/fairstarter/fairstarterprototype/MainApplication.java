@@ -6,7 +6,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
+//import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.reactnative.camera.RNCameraPackage;
 //import com.spyworldxp.barcodescanner.BarcodeScannerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -52,10 +52,10 @@ public class MainApplication extends Application implements ReactApplication {
         new MainReactPackage(),
             new RNFirebasePackage(),
             new VectorIconsPackage(),
-            new RNDeviceInfo(),
+            //new RNDeviceInfo(),
             new RNCameraPackage(),
             //new BarcodeScannerPackage(),
-        new RNFirebasePackage(),
+        //new RNFirebasePackage(),
         // add/remove these packages as appropriate
         new RNFirebaseAdMobPackage(),
         new RNFirebaseAnalyticsPackage(),

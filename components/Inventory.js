@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
-import DeviceInfo from 'react-native-device-info';
 
 import InventoryList from './InventoryList';
 import LogIn from './LogIn';
@@ -101,7 +100,7 @@ export default class Inventory extends React.Component {
   }
 
   submit = () => {
-    if(this.state.text == '__' || this.state.description == "" || this.state.price == '__' || this.state.quantity == "" ) {
+    if(this.state.text == '__' || this.state.description == "" || this.state.price == '__' || this.state.quantity == "" || isNaN(parseInt(this.state.quantity))) {
       Alert.alert("Please enter all information.")
     }
     else {
@@ -255,7 +254,7 @@ const styles = StyleSheet.create ({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      height: 40
+      height: 41
    },
    editcontainer: {
       justifyContent: 'center',
@@ -273,7 +272,9 @@ const styles = StyleSheet.create ({
       color: '#518dff',
       backgroundColor: '#ddeaff',
       fontFamily: 'American Typewriter',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      marginBottom: 1,
+      marginTop: 1
    },
    buttonTextAdjust: {
       borderWidth: 1,

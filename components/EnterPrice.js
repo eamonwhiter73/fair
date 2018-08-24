@@ -14,7 +14,7 @@ export default class EnterPrice extends React.Component {
   };
 
   submitEdit = () => {
-    if(this.state.text != null) {
+    if(this.state.text != null || isNaN(parseInt(this.state.text))) {
       const { navigate } = this.props.navigation;
       
       if(this.props.navigation.state.params.mode == "fromEnterSku") {
@@ -68,10 +68,10 @@ export default class EnterPrice extends React.Component {
 
   render() {
     return (
-      <View style={{flexDirection: 'row', paddingHorizontal: 15}}>
-        <Text style={{marginTop: 25}}>Price: </Text>
+      <View style={{paddingHorizontal: 15, flex: 1, backgroundColor: '#ddeaff', alignItems: 'center'}}>
+        <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff', marginTop: 50}}>Price: </Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 1, marginTop: 15, backgroundColor: '#ffffff'}}
+          style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
           onSubmitEditing={this.submitEdit}

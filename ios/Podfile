@@ -28,7 +28,7 @@ target 'fairstarterprototype' do
 
     #pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
-    pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+    #pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
     pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 

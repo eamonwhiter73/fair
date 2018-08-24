@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Alert, TouchableOpacity, Image } from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class LogIn extends React.Component {
@@ -7,7 +7,8 @@ export default class LogIn extends React.Component {
   static navigationOptions = {
     headerTitle: 'Log In',
     headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
-    headerStyle: {backgroundColor: '#ddeaff'}
+    headerStyle: {backgroundColor: '#ddeaff'},
+    headerLeft: null
   };
 
   state = {
@@ -30,6 +31,8 @@ export default class LogIn extends React.Component {
     else {
       firebase.auth().signInAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         navigate('Inventory', { mode: 'fromLogIn' });
+      }).catch(err => {
+        Alert.alert(err);
       });
     }
   }
@@ -59,34 +62,44 @@ export default class LogIn extends React.Component {
     if (this.state.loading) return null;
 
     return (
-      <View style={{paddingHorizontal: 15, backgroundColor: '#ddeaff'}}>
-        <View style={{}}>
+      <View style={{flex: 1, paddingHorizontal: 15, backgroundColor: '#ddeaff'}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 50}}>
+          <Image
+            style={styles.stretch}
+            source={require('../assets/fairstarter.png')}
+          />
+        </View>
+        <View style={{alignItems: 'center'}}>
           <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Email: </Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff'}}
+            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
             onChangeText={(text) => this.setState({email: text})}
             value={this.state.email}
           />
         </View>
-        <View style={{}}>
+        <View style={{alignItems: 'center'}}>
           <Text style={{marginTop: 15, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Password: </Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff'}}
+            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
             onChangeText={(text) => this.setState({password: text})}
             value={this.state.password}
             onSubmitEditing={this.submitEdit}
             secureTextEntry={true}
           />
         </View>
-        <TouchableOpacity
-            style = {styles.sellcontainer}
-            onPress={() => {
-              const { navigate } = this.props.navigation;
-              navigate('SignUp')
-            }}
-          >
-            <Text style = {styles.button}>No account? Sign Up!</Text>
-          </TouchableOpacity>
+        <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 15}}>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+                style = {styles.sellcontainer}
+                onPress={() => {
+                  const { navigate } = this.props.navigation;
+                  navigate('SignUp')
+                }}
+            >
+              <Text style = {styles.button}>No account? Sign Up!</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
@@ -94,20 +107,20 @@ export default class LogIn extends React.Component {
 
 const styles = StyleSheet.create ({
    sellcontainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 15
+      flex: 1,
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: '#518dff',
    },
    button: {
-      borderWidth: 1,
       padding: 10,
-      borderColor: 'black',
-      flex: 1,
       textAlign: 'center',
       color: 'white',
       fontFamily: 'American Typewriter',
-      backgroundColor: '#518dff'
-
+      backgroundColor: '#518dff',
+   },
+   stretch: {
+      width: 150,
+      height: 150,
    }
 })

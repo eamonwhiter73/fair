@@ -26,32 +26,32 @@ export default class SignUp extends React.Component {
       firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         navigate('Inventory');
       }).catch((error) => {
-        alert(error);
+        Alert.alert(error);
       });
     }
   }
 
   render() {
     return (
-      <View style={{paddingHorizontal: 15}}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{marginTop: 25}}>Email: </Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 1, marginTop: 15, backgroundColor: '#ffffff'}}
-            onChangeText={(text) => this.setState({email: text})}
-            value={this.state.email}
-          />
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{marginTop: 25}}>Password: </Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 1, marginTop: 15, backgroundColor: '#ffffff'}}
-            onChangeText={(text) => this.setState({password: text})}
-            value={this.state.password}
-            onSubmitEditing={this.submitEdit}
-            secureTextEntry={true}
-          />
-        </View>
+      <View style={{paddingHorizontal: 15, backgroundColor: '#ddeaff', flex: 1, justifyContent: 'center'}}>
+          <View style={{alignItems: 'center'}}>
+            <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Email: </Text>
+            <TextInput
+              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+              onChangeText={(text) => this.setState({email: text})}
+              value={this.state.email}
+            />
+          </View>
+          <View style={{alignItems: 'center', marginBottom: 150}}>
+            <Text style={{marginTop: 15, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Password: </Text>
+            <TextInput
+              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+              onChangeText={(text) => this.setState({password: text})}
+              value={this.state.password}
+              onSubmitEditing={this.submitEdit}
+              secureTextEntry={true}
+            />
+          </View>
       </View>
     );
   }

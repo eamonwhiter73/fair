@@ -6,6 +6,12 @@ import DeepLinking from 'react-native-deep-linking';
 
 export default class BarcodeScanner extends React.Component {
 
+  static navigationOptions = {
+    headerTitle: 'Scan Item',
+    headerTitleStyle: {textAlign: 'center', flex: 1, backgroundColor: '#ddeaff', color: '#518dff', fontFamily: 'American Typewriter', fontWeight: 'bold', fontSize: 20},
+    headerStyle: {backgroundColor: '#ddeaff'}
+  };
+
   constructor() {
     super();
     this.state = {
@@ -80,7 +86,7 @@ export default class BarcodeScanner extends React.Component {
               }
             }}
           >
-            <Text style = {styles.button}>MANUAL SALE</Text>
+            <Text style = {styles.buttonManual}>MANUAL SALE</Text>
           </TouchableOpacity>
         </View>
       )
@@ -200,10 +206,23 @@ const styles = StyleSheet.create({
   button: {
       borderWidth: 1,
       padding: 10,
-      borderColor: 'black',
+      borderColor: '#357aff',
       flex: 1,
       textAlign: 'center',
-      color: 'blue',
-      backgroundColor: '#aaa'
-  }
+      color: '#518dff',
+      backgroundColor: '#ddeaff',
+      fontFamily: 'American Typewriter',
+      fontWeight: 'bold'
+   },
+   buttonManual: {
+      borderWidth: 1,
+      padding: 10,
+      borderColor: '#357aff',
+      flex: 1,
+      textAlign: 'center',
+      color: '#518dff',
+      backgroundColor: '#c9deff',
+      fontFamily: 'American Typewriter',
+      fontWeight: 'bold'
+   }
 });
