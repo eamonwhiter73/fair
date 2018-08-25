@@ -32,7 +32,7 @@ export default class LogIn extends React.Component {
       firebase.auth().signInAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         navigate('Inventory', { mode: 'fromLogIn' });
       }).catch(err => {
-        Alert.alert(err);
+        Alert.alert(err.message);
       });
     }
   }

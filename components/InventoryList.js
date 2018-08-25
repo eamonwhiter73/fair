@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, FlatList, TouchableOpacity, Platform } from 'react-native';
 import firebase from 'react-native-firebase';
-import { SearchBar } from 'react-native-elements'
+import { SearchBar } from 'react-native-elements';
 
 export default class InventoryList extends React.Component {
 
@@ -16,22 +16,24 @@ export default class InventoryList extends React.Component {
     super();
     this.unsubscribe = null;
     this.authSubscription = null;
-    this.ref = null;
+    this.refTwo = firebase.firestore().collection('items');
   }
 
   componentDidMount() {
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate) 
+    console.log("user email: " + this.state.user.email);
+    this.unsubscribe = this.refTwo.doc(this.state.user.email).collection('userItems').onSnapshot(this.onCollectionUpdate);
   }
 
   componentWillMount() {
     //EVENTUALLY RECEIVE THIS FROM PARENT INVENTORY COMPONENT//
     this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+      console.log(user.email + " user email");
+      //this.ref = firebase.firestore().collection('items').doc(user.email).collection('userItems');
+
       this.setState({
         loading: false,
         user,
       })
-
-      this.ref = firebase.firestore().collection('items').doc(user.email).collection('userItems');
     });
   }
 
@@ -42,6 +44,7 @@ export default class InventoryList extends React.Component {
 
   onCollectionUpdate = (querySnapshot) => {
     const items = [];
+    console.log(querySnapshot._docs + " querySnapshot");
 
     querySnapshot.forEach((doc) => {
       const { barcode, description, email, price, quantity } = doc.data();
