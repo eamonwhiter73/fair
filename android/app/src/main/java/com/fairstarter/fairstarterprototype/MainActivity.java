@@ -39,6 +39,7 @@ public class MainActivity extends ReactActivity {
     private static final int CHARGE_REQUEST_CODE = 1;
     private PosClient posClient;
     private String sku;
+    private String email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends ReactActivity {
 	        String[] array = arr[arr.length - 1].toString().split("/");
 	        String price = array[0];
 	        sku = array[1];
+	        email = array[2];
 	       	Log.d("********price(*******", price);
 	        Log.d("********sku(*******", sku);
 
@@ -148,7 +150,7 @@ public class MainActivity extends ReactActivity {
 		    	FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 		    	Object quant = new Object();
-		    	db.collection("items")
+		    	db.collection("items").document(email).collection("userItems")
 			        .whereEqualTo("barcode", sku)
 			        .get()
 			        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -165,7 +167,7 @@ public class MainActivity extends ReactActivity {
 
 							        Number newVal = Integer.parseInt(data.get("quantity").toString()) - 1;
 
-							        DocumentReference doc = db.collection("items").document(document.getId());
+							        DocumentReference doc = db.collection("items").document(email).collection("userItems").document(document.getId());
 
 									// Set the "isCapital" field of the city 'DC'
 									doc

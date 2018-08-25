@@ -58,7 +58,7 @@ export default class EnterSku extends React.Component {
                     urlL = "square-commerce-v1://payment/create?data=" + encodeURIComponent(JSON.stringify(dataParameter));
                   }
                   else {
-                    urlL = "square-commerce-v1://payment/"+Number(price)*100+"/"+self.state.text;
+                    urlL = "square-commerce-v1://payment/"+Number(price)*100+"/"+self.state.text+"/"+self.state.user.email;
                   }
 
                   Linking.openURL(urlL).then(() => {

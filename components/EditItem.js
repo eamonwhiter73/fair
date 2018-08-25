@@ -83,29 +83,15 @@ export default class EditItem extends React.Component {
     }
   }
 
-  getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key, value) => {
-      if (typeof value === "object" && value !== null) {
-        if (seen.has(value)) {
-          return;
-        }
-        seen.add(value);
-      }
-      return value;
-    };
-  };
-
   deleteItem = () => {
 
     this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
       snap.forEach(doc => {
-        console.log(JSON.stringify(doc, this.getCircularReplacer()) + "SNAPPPPPP ******");
         doc.ref.delete().then(() => {
           const { navigate } = this.props.navigation;
 
           navigate('Inventory');
-        }).catch(error => Alert.alert(error));
+        })
       })
     }); 
   }  

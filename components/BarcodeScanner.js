@@ -142,6 +142,7 @@ export default class BarcodeScanner extends React.Component {
     price = "";
 
     if(this.props.navigation.state.params.mode == "sell") {
+      self = this;
 
       firebase.firestore().collection("items").doc(this.state.user.email).collection('userItems').where("barcode", "==", `${data}`)
         .get()
@@ -175,7 +176,7 @@ export default class BarcodeScanner extends React.Component {
                   urlL = "square-commerce-v1://payment/create?data=" + encodeURIComponent(JSON.stringify(dataParameter));
                 }
                 else {
-                  urlL = "square-commerce-v1://payment/"+Number(price)*100+"/"+doc.data().barcode;
+                  urlL = "square-commerce-v1://payment/"+Number(price)*100+"/"+doc.data().barcode+"/"+self.state.user.email;
                 }
 
                 Linking.openURL(urlL).then(() => {

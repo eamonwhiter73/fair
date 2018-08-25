@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Linking, Platform, Alert } from 'react-native';
+import firebase from 'react-native-firebase';
 
 export default class EnterPrice extends React.Component {
 
@@ -12,6 +13,11 @@ export default class EnterPrice extends React.Component {
   state = {
     text: "",
   };
+
+  constructor() {
+    super();
+    this.authSubscription = null;
+  }
 
   submitEdit = () => {
     if(this.state.text != null || isNaN(parseInt(this.state.text))) {
@@ -47,7 +53,7 @@ export default class EnterPrice extends React.Component {
           urlL = "square-commerce-v1://payment/create?data=" + encodeURIComponent(JSON.stringify(dataParameter));
         }
         else {
-          urlL = "square-commerce-v1://payment/"+Number(this.state.text)*100+"/manual_sale";
+          urlL = "square-commerce-v1://payment/"+Number(this.state.text)*100+"/manual_sale/"+this.state.user.email;
         }
 
         Linking.openURL(urlL).then(() => {
@@ -64,6 +70,22 @@ export default class EnterPrice extends React.Component {
     else {
       Alert.alert("Please enter a price.");
     }
+  }
+
+  componentWillMount() {
+    this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+
+      if(user) {
+        this.setState({
+          loading: false,
+          user,
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.authSubscription();
   }
 
   render() {

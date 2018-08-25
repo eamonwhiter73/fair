@@ -156,7 +156,7 @@ exports.updateItem = functions.firestore
 							delta = Number(newValue.quantity) - Number(previousValue.quantity);
 						}
 						else if(Number(newValue.quantity) < Number(previousValue.quantity)) {
-							delta = Number(-1 * (previousValue.quantity - (Number(previousValue.quantity) - Number(newValue.quantity))));
+							delta = -1*(Number(previousValue.quantity) - Number(newValue.quantity));
 						}
 						else {
 							delta = 0;
