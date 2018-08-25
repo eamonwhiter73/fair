@@ -52,7 +52,7 @@ export default class EditItem extends React.Component {
 
   updateInventory = () => {
 
-    if(this.state.description != null || this.state.quantity != null || this.state.price != null || isNaN(parseInt(this.state.price)) || isNaN(parseInt(this.state.quantity))) {
+    if(this.state.description != null || this.state.quantity != null || this.state.price != null || !isNaN(parseInt(this.state.price)) || !isNaN(parseInt(this.state.quantity))) {
       Alert.alert(
         'SAVING',
         'Are you sure you want to save this information?',
@@ -64,15 +64,16 @@ export default class EditItem extends React.Component {
 
             this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
               console.log(snap);
-
-              snap._changes[0]._document._ref.update({
+              snap.forEach(doc => {
+                doc.ref.update({
                   description: this.state.description,
                   price: this.state.price,
                   quantity: this.state.quantity
-              }).then(() => {
-                Alert.alert("SAVED", "Inventory updated!");
-              }).catch(err => {
-                Alert.alert(err);
+                }).then(() => {
+                  Alert.alert("SAVED", "Inventory updated!");
+                }).catch(err => {
+                  Alert.alert(err);
+                })
               })
             });      
             
@@ -84,11 +85,12 @@ export default class EditItem extends React.Component {
   }
 
   deleteItem = () => {
+    self = this;
 
     this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
       snap.forEach(doc => {
         doc.ref.delete().then(() => {
-          const { navigate } = this.props.navigation;
+          const { navigate } = self.props.navigation;
 
           navigate('Inventory');
         })

@@ -102,7 +102,7 @@ export default class Inventory extends React.Component {
   }
 
   submit = () => {
-    if(this.state.text == '__' || this.state.description == "" || this.state.price == '__' || this.state.quantity == "" || isNaN(parseInt(this.state.quantity))) {
+    if(this.state.text == '__' || this.state.description == "" || this.state.price == '__' || this.state.quantity == "" || isNaN(parseInt(this.state.quantity)) || isNaN(parseInt(this.state.price))) {
       Alert.alert("Please enter all information.")
     }
     else {

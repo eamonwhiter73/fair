@@ -90,10 +90,10 @@ exports.addItem = functions.firestore
 				inventoryApi.adjustInventory(locationId, variationId, adjustBody).then(function(data) {
 				  console.log('API called successfully in inventoryApi. Returned data: ' + JSON.stringify(data));
 				}, function(error) {
-				  console.error(error);
+				  console.log(error.message);
 				});
 			}, function(error) {
-			  console.error(error);
+			  console.log(error.message);
 			});
 		  });
 		return null;
@@ -202,23 +202,23 @@ exports.updateItem = functions.firestore
 									api.upsertCatalogObject(body1).then(function(dataUpsert2) {
 								    	console.log('API called successfully in update from upsertDescriptionOfItem. Returned data: ' + JSON.stringify(dataUpsert2));
 									}, function(error) {
-									  console.error(error);
+									  console.log(error.message);
 									});
 								});
 							}
 						}, function(error) {
-						  console.error(error);
+						  console.log(error.message);
 						});
 					}, function(error) {
-					  console.error(error);
+					  console.log(error.message);
 					});
 				}
 			}, function(error) {
-			  console.error(error);
+			  console.log(error.message);
 			});
 		    
 		}, function(error) {
-		  console.error(error);
+		  console.log(error.message);
 		});
 
       return null;
@@ -255,16 +255,14 @@ exports.deleteItem = functions.firestore
           console.log('Delete API called successfully on Variation. Returned data: ' + data);
           api.deleteCatalogObject(variationObj.item_variation_data.item_id).then(function(data) {
             console.log('Delete API called successfully on Item. Returned data: ' + data);
-            const { navigate } = this.props.navigation;
-
-            navigate('Inventory');
           }, function(error) {
-            Alert.alert(error);
+            console.log(error.message);
           });
         }, function(error) {
-          Alert.alert(error);
+          console.log(error.message);
         });
       });
 
       // perform desired operations ...
+      return null;
     });

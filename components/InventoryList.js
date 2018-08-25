@@ -27,7 +27,7 @@ export default class InventoryList extends React.Component {
   componentWillMount() {
     //EVENTUALLY RECEIVE THIS FROM PARENT INVENTORY COMPONENT//
     this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
-      console.log(user.email + " user email");
+      //console.log(user.email + " user email");
       //this.ref = firebase.firestore().collection('items').doc(user.email).collection('userItems');
 
       this.setState({
@@ -72,7 +72,7 @@ export default class InventoryList extends React.Component {
   search = () => {
     var self = this;
 
-    this.ref/*.where("email", "==", this.state.user.email)*/
+    this.refTwo.doc(this.state.user.email).collection('userItems').where("email", "==", this.state.user.email)
       .get()
       .then(function(querySnapshot) {
           var searchObjs = [];
@@ -126,7 +126,7 @@ export default class InventoryList extends React.Component {
   clear = () => {
     var self = this;
 
-    this.ref.where("barcode", "!=", null)
+    this.refTwo.doc(this.state.user.email).collection('userItems').where("barcode", "!=", null)
       .get()
       .then(function(querySnapshot) {
           var items = [];

@@ -20,7 +20,10 @@ export default class EnterPrice extends React.Component {
   }
 
   submitEdit = () => {
-    if(this.state.text != null || isNaN(parseInt(this.state.text))) {
+    if(this.state.text == null || isNaN(parseInt(this.state.text))) {
+      Alert.alert("Please enter a price.");
+    }
+    else {
       const { navigate } = this.props.navigation;
       
       if(this.props.navigation.state.params.mode == "fromEnterSku") {
@@ -67,9 +70,6 @@ export default class EnterPrice extends React.Component {
       
       navigate('Inventory', { mode: "fromPrice" });
     }
-    else {
-      Alert.alert("Please enter a price.");
-    }
   }
 
   componentWillMount() {
@@ -94,7 +94,7 @@ export default class EnterPrice extends React.Component {
         <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff', marginTop: 50}}>Price ($): </Text>
         <TextInput
           style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
-          onChangeText={(text) => this.setState({text})}
+          onChangeText={(text) => this.setState({text: text})}
           value={this.state.text}
           onSubmitEditing={this.submitEdit}
         />
