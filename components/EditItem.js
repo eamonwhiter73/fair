@@ -53,6 +53,8 @@ export default class EditItem extends React.Component {
   updateInventory = () => {
 
     if(this.state.description != null || this.state.quantity != null || this.state.price != null || !isNaN(parseInt(this.state.price)) || !isNaN(parseInt(this.state.quantity))) {
+      count = 0; //HACK FIX - onSpanshot firing more than once for some reason.
+
       Alert.alert(
         'SAVING',
         'Are you sure you want to save this information?',
@@ -63,23 +65,25 @@ export default class EditItem extends React.Component {
           {text: 'OK', onPress: () => {
 
             this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
-              console.log(snap);
-              snap.forEach(doc => {
-                doc.ref.update({
+              if(count == 0) {
+                snap._docs[0]._ref.update({
                   description: this.state.description,
                   price: this.state.price,
                   quantity: this.state.quantity
                 }).then(() => {
                   Alert.alert("SAVED", "Inventory updated!");
+                  console.log("SAVED INVENTORY");
                 }).catch(err => {
-                  Alert.alert(err);
+                  Alert.alert(err.message);
                 })
-              })
+              }
+
+              count++;
             });      
             
           }},
         ],
-        { cancelable: false }
+        //{ cancelable: false }
       )
     }
   }
@@ -129,22 +133,22 @@ export default class EditItem extends React.Component {
           />
         </View>
         <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity
-          style = {styles.container}
-          onPress={() => {
-            this.updateInventory()
-          }}
-        >
-          <Text style = {styles.button}>SAVE</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style = {styles.container}
-          onPress={() => {
-            this.deleteItem();
-          }}
-        >
-          <Text style = {styles.button}>DELETE</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style = {styles.container}
+            onPress={() => {
+              this.updateInventory();
+            }}
+          >
+            <Text style = {styles.button}>SAVE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style = {styles.container}
+            onPress={() => {
+              this.deleteItem();
+            }}
+          >
+            <Text style = {styles.button}>DELETE</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

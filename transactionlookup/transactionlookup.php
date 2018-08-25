@@ -46,7 +46,9 @@
 	$transactionTenderId = $array['transaction']['tenders'][0]['id'];
 	$transactionTenderLocationId = $array['transaction']['tenders'][0]['location_id'];
 	$paymentTenderId = $array1[0]['id'];
-	$sku = $array1[0]['itemizations'][0]['notes'];
+	$pieces = explode("/", $array1[0]['itemizations'][0]['notes']);
+	$sku = $pieces[0];
+	$email = $pieces[1];
 
 	if($transactionTenderId == $paymentTenderId) {
 
@@ -128,6 +130,7 @@
 
 		$arr = array();
 		$arr['data'] = $sku;
+		$arr['email'] = $email;
 
 		echo json_encode($arr);
 	}

@@ -164,7 +164,7 @@ export default class BarcodeScanner extends React.Component {
                   client_id: "sq0idp-vHgDfd4SSLvkgAqfjZpwEg",
 
                   version: "1.3",
-                  notes: doc.data().barcode,
+                  notes: doc.data().barcode+"/"+self.state.user.email,
                   options: {
                     supported_tender_types: ["CREDIT_CARD","CASH","OTHER","SQUARE_GIFT_CARD","CARD_ON_FILE"],
                   }

@@ -15,30 +15,7 @@ $(document).ready(function() {
 	        messagingSenderId: "736108062496"
 	    };
 
-	var resultString = "";
-
 	firebase.initializeApp(config);
-
-	firebase.auth().onAuthStateChanged(function(user) {
-	  if (user) {
-	    // User is signed in.
-	    var isAnonymous = user.isAnonymous;
-	    //alert(user.uid);
-	    // ...
-	  } else {
-	    // User is signed out.
-	    // ...
-	  }
-	  // ...
-	});
-	
-	firebase.auth().signInAnonymously().catch(function(error) {
-  		  // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		  // ...
-		  alert(errorMessage);
-	});
 
 	var db = firebase.firestore();
 
@@ -54,23 +31,10 @@ $(document).ready(function() {
 		return transactionInfo;
 	}
 
-	function getCircularReplacer() {
-	  const seen = new WeakSet();
-	  return (key, value) => {
-	    if (typeof value === "object" && value !== null) {
-	      if (seen.has(value)) {
-	        return;
-	      }
-	      seen.add(value);
-	    }
-	    return value;
-	  };
-	};
-
 	// Makes a result string for success situation
 	function handleSuccess(transactionInfo){
-	  resultString+="";
-	  
+	  var resultString ="";
+
 	  if (clientTransactionId in transactionInfo) {
 	    resultString += "Client Transaction ID: " + transactionInfo[clientTransactionId] + "<br>";
 	  }
@@ -103,18 +67,20 @@ $(document).ready(function() {
 		    	}
 
 		    	var quant = 0;
-		    	var itemsRef = db.collection('items').doc(json.email).collection('userItems');
+		    	var itemsRef = db.collection('items');
 				var query = itemsRef.where('barcode', '==', String(json.data)).get()
 				    .then(snapshot => {
-				      //console.log(JSON.stringify(snapshot, getCircularReplacer()) + " snapshot");
 
 				      snapshot.forEach(doc => {
-				        quant = Number(doc.data().quantity);
+				      	
+				        quant = Number(doc.data()[Object.keys(doc.data())[0]].quantity);
 				        
 				        var newVal = Number(quant) - 1;
 				    	
 				    	itemsRef.doc(doc.id).update({
-						    quantity: newVal
+				    		[Object.keys(doc.data())[0]]]: {
+						    	quantity: newVal
+						    }
 						})
 						.then(function() {
 						    alert("Quantity successfully updated! Please return to Fairstarter!");
@@ -127,17 +93,14 @@ $(document).ready(function() {
 				    .catch(err => {
 				      alert('Error getting documents ' + JSON.stringify(err));
 				    });
-
 		    })
 		  }
 		  else {
 		  	alert("Response is not ok.");
-		  	resultString += "Response is not ok";
 		  }
 		})
 		.catch(error=> {
-			alert("Error: " + error.message);
-			resultString += "Error: " + error.message;
+			alert("Error: " + error);
 		});
 
 	  }
@@ -150,10 +113,10 @@ $(document).ready(function() {
 
 	// Makes an error string for error situation
 	function handleError(transactionInfo){
+	  var resultString ="";
 
 	  if (errorField in transactionInfo) {
 	    resultString += "Error: " + JSON.stringify(transactionInfo[errorField])+ "<br>";
-
 	    if(transactionInfo[errorField] == "not_logged_in") {
 	    	alert("Please open the Square POS app and login, and then return to Fairstarter and redo the transaction.");
 	    }
@@ -172,16 +135,16 @@ $(document).ready(function() {
 
 	// Determines whether error or success based on urlParams, then prints the string
 	function printResponse() {
-	  var resultStringInside = "";
 	  var responseUrl = window.location.href;
 	  var transactionInfo = getTransactionInfo(responseUrl);
+	  var resultString = "IN PRINT RESPONSE";
 
 	  if (errorField in transactionInfo) {
-	    resultStringInside = handleError(transactionInfo);
+	    resultString = handleError(transactionInfo);
 	  } else {
-	    resultStringInside = handleSuccess(transactionInfo);
+	    resultString = handleSuccess(transactionInfo);
 	  }
 
-	  document.getElementById('url').innerHTML = resultStringInside;
+	  document.getElementById('url').innerHTML = resultString;
 	}
 });
