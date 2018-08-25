@@ -22,7 +22,7 @@ oauth2.accessToken = 'sq0atp-on5KcHDr0dhlbefU0EwVwg';
 // });
 
 exports.addItem = functions.firestore
-    .document('items/{itemId}')
+    .document('items/{email}/userItems/{itemId}')
     .onCreate((snap, context) => {
 		// Get an object representing the document
 		// e.g. {'name': 'Marie', 'age': 66}
@@ -100,7 +100,7 @@ exports.addItem = functions.firestore
     });
 
 exports.updateItem = functions.firestore
-    .document('items/{itemId}')
+    .document('items/{email}/userItems/{itemId}')
     .onUpdate((change, context) => {
         // Get an object representing the document
         // e.g. {'name': 'Marie', 'age': 66}
@@ -225,7 +225,7 @@ exports.updateItem = functions.firestore
     });
 
 exports.deleteItem = functions.firestore
-    .document('items/{itemId}')
+    .document('items/{email}/userItems/{itemId}')
     .onDelete((snap, context) => {
       // Get an object representing the document prior to deletion
       // e.g. {'name': 'Marie', 'age': 66}

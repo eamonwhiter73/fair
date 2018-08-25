@@ -19,6 +19,8 @@ export default class EditItem extends React.Component {
       price: "",
       quantity: ""
     };
+    this.authSubscription = null;
+    this.ref = null;
   }
 
   componentDidMount() {
@@ -28,6 +30,24 @@ export default class EditItem extends React.Component {
       price: this.props.navigation.state.params.price,
       quantity: String(this.props.navigation.state.params.quantity)
     })
+
+    this.ref = firebase.firestore().collection('items').doc(this.state.user.email).collection('userItems');
+  }
+
+  componentWillMount() {
+    this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+
+      if(user) {
+        this.setState({
+          loading: false,
+          user,
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.authSubscription();
   }
 
   updateInventory = () => {
@@ -42,18 +62,18 @@ export default class EditItem extends React.Component {
           }},
           {text: 'OK', onPress: () => {
 
-            const ref = firebase.firestore().collection('items').where("barcode", "==", this.state.sku);
-
-            ref.onSnapshot((snap) => {
+            this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
               console.log(snap);
 
-              snap._docs[0]._ref.update({
+              snap._changes[0]._document._ref.update({
                   description: this.state.description,
                   price: this.state.price,
                   quantity: this.state.quantity
               }).then(() => {
                 Alert.alert("SAVED", "Inventory updated!");
-              });
+              }).catch(err => {
+                Alert.alert(err);
+              })
             });      
             
           }},
@@ -63,17 +83,30 @@ export default class EditItem extends React.Component {
     }
   }
 
+  getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
+
   deleteItem = () => {
-    const ref = firebase.firestore().collection('items').where("barcode", "==", this.state.sku);
 
-    ref.onSnapshot((snap) => {
-      console.log(snap);
-      snap._changes[0]._document._ref.delete().then(() => {
-        const { navigate } = this.props.navigation;
+    this.ref.where("barcode", "==", this.state.sku).onSnapshot((snap) => {
+      snap.forEach(doc => {
+        console.log(JSON.stringify(doc, this.getCircularReplacer()) + "SNAPPPPPP ******");
+        doc.ref.delete().then(() => {
+          const { navigate } = this.props.navigation;
 
-        navigate('Inventory');
+          navigate('Inventory');
+        }).catch(error => Alert.alert(error));
       })
-      .catch((error) => {Alert.alert(error)});
     }); 
   }  
 
@@ -83,16 +116,16 @@ export default class EditItem extends React.Component {
         <View style={{alignItems: 'center', marginTop: 50}}>
           <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Description: </Text>
           <TextInput
-            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
             onChangeText={(text) => this.setState({description: text})}
             value={this.state.description}
             placeholder={this.state.description}
           />
         </View>
         <View style={{alignItems: 'center'}}>
-          <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Price: </Text>
+          <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Price ($): </Text>
           <TextInput
-            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
             onChangeText={(text) => this.setState({price: text})}
             value={this.state.price}
             placeholder={this.state.price}
@@ -101,7 +134,7 @@ export default class EditItem extends React.Component {
         <View style={{alignItems: 'center'}}>
           <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Quantity: </Text>
           <TextInput
-            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+            style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
             onChangeText={(text) => this.setState({quantity: text})}
             value={this.state.quantity}
             placeholder={this.state.quantity}
@@ -119,7 +152,7 @@ export default class EditItem extends React.Component {
         <TouchableOpacity
           style = {styles.container}
           onPress={() => {
-            this.deleteItem()
+            this.deleteItem();
           }}
         >
           <Text style = {styles.button}>DELETE</Text>
@@ -134,12 +167,11 @@ const styles = StyleSheet.create ({
    container: {
       flexDirection: 'row',
       //justifyContent: 'center',
-      marginTop: 15,
+      marginTop: 25,
       //alignItems: 'flex-end',
       borderColor: '#518dff',
       borderRadius: 4,
       borderWidth: 1,
-
    },
    button: {
       flexDirection: 'row',

@@ -69,9 +69,9 @@ export default class EnterPrice extends React.Component {
   render() {
     return (
       <View style={{paddingHorizontal: 15, flex: 1, backgroundColor: '#ddeaff', alignItems: 'center'}}>
-        <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff', marginTop: 50}}>Price: </Text>
+        <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff', marginTop: 50}}>Price ($): </Text>
         <TextInput
-          style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+          style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
           onSubmitEditing={this.submitEdit}

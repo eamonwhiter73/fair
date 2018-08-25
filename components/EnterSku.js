@@ -14,6 +14,11 @@ export default class EnterSku extends React.Component {
     text: "",
   };
 
+  constructor() {
+    super();
+    this.authSubscription = null;
+  }
+
   submitEdit = () => {
     if(this.state.text != null || isNaN(parseInt(this.state.text))) {
       const { navigate } = this.props.navigation;
@@ -21,7 +26,7 @@ export default class EnterSku extends React.Component {
 
       if(this.props.navigation.state.params.mode == 'sell') {
 
-        firebase.firestore().collection("items").where("barcode", "==", this.state.text)
+        firebase.firestore().collection("items").doc(this.state.user.email).collection('userItems')
           .get()
           .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
@@ -74,12 +79,28 @@ export default class EnterSku extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+
+      if(user) {
+        this.setState({
+          loading: false,
+          user,
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.authSubscription();
+  }
+
   render() {
     return (
       <View style={{paddingHorizontal: 15, flex: 1, backgroundColor: '#ddeaff', alignItems: 'center'}}>
         <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff', marginTop: 50}}>SKU: </Text>
         <TextInput
-          style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+          style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
           onSubmitEditing={this.submitEdit}

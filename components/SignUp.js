@@ -37,7 +37,7 @@ export default class SignUp extends React.Component {
           <View style={{alignItems: 'center'}}>
             <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Email: </Text>
             <TextInput
-              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
               onChangeText={(text) => this.setState({email: text})}
               value={this.state.email}
             />
@@ -45,7 +45,7 @@ export default class SignUp extends React.Component {
           <View style={{alignItems: 'center', marginBottom: 150}}>
             <Text style={{marginTop: 15, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Password: </Text>
             <TextInput
-              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4}}
+              style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
               onChangeText={(text) => this.setState({password: text})}
               value={this.state.password}
               onSubmitEditing={this.submitEdit}

@@ -14,9 +14,9 @@ export default class InventoryList extends React.Component {
 
   constructor() {
     super();
-    this.ref = firebase.firestore().collection('items');
     this.unsubscribe = null;
     this.authSubscription = null;
+    this.ref = null;
   }
 
   componentDidMount() {
@@ -29,7 +29,9 @@ export default class InventoryList extends React.Component {
       this.setState({
         loading: false,
         user,
-      });
+      })
+
+      this.ref = firebase.firestore().collection('items').doc(user.email).collection('userItems');
     });
   }
 
@@ -67,7 +69,7 @@ export default class InventoryList extends React.Component {
   search = () => {
     var self = this;
 
-    this.ref.where("email", "==", this.state.user.email)
+    this.ref/*.where("email", "==", this.state.user.email)*/
       .get()
       .then(function(querySnapshot) {
           var searchObjs = [];

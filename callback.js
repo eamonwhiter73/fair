@@ -72,12 +72,15 @@ $(document).ready(function() {
 				    .then(snapshot => {
 
 				      snapshot.forEach(doc => {
-				        quant = Number(doc.data().quantity);
+				      	
+				        quant = Number(doc.data()[Object.keys(doc.data())[0]].quantity);
 				        
 				        var newVal = Number(quant) - 1;
 				    	
 				    	itemsRef.doc(doc.id).update({
-						    quantity: newVal
+				    		[Object.keys(doc.data())[0]]]: {
+						    	quantity: newVal
+						    }
 						})
 						.then(function() {
 						    alert("Quantity successfully updated! Please return to Fairstarter!");

@@ -18,6 +18,7 @@ export default class BarcodeScanner extends React.Component {
       response: null,
       showCamera: true,
     };
+    this.authSubscription = null;
     //this.ref = firebase.firestore().collection('items');
   }
 
@@ -42,8 +43,21 @@ export default class BarcodeScanner extends React.Component {
 
   }
 
+  componentWillMount() {
+    this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+
+      if(user) {
+        this.setState({
+          loading: false,
+          user,
+        });
+      }
+    });
+  }
+
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleUrl);
+    this.authSubscription();
   }
 
   handleUrl = ({ url }) => {
@@ -129,7 +143,7 @@ export default class BarcodeScanner extends React.Component {
 
     if(this.props.navigation.state.params.mode == "sell") {
 
-      firebase.firestore().collection("items").where("barcode", "==", `${data}`)
+      firebase.firestore().collection("items").doc(this.state.user.email).collection('userItems').where("barcode", "==", `${data}`)
         .get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {

@@ -83,12 +83,14 @@ export default class Inventory extends React.Component {
   }
 
   addItem() {
-    this.ref.add({
-      barcode: this.state.text,
-      description: this.state.description,
-      price: this.state.price,
-      quantity: this.state.quantity,
-      email: this.state.user.email
+    this.ref.doc(this.state.user.email).collection('userItems').add({
+      //[this.state.user.email]: {
+        barcode: this.state.text,
+        description: this.state.description,
+        price: this.state.price,
+        quantity: this.state.quantity,
+        email: this.state.user.email
+      //}
     });
 
     this.setState({
@@ -197,17 +199,18 @@ export default class Inventory extends React.Component {
           >
             <Text style = {styles.button}>SCAN ITEM</Text>
           </TouchableOpacity>
-          <Text style={{}}>{'\n'}Item #: {this.state.text} | Price: ${this.state.price}{"\n"}</Text>
+          <Text style={{}}>{'\n'}SKU: {this.state.text} | Price: ${this.state.price}{"\n"}</Text>
           <View style={{flexDirection: 'row'}}>
             <Text style={{marginTop: 10}}>Description: </Text>
             <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.74, marginRight: 15, backgroundColor: '#ffffff'}}
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.74, marginRight: 15, backgroundColor: '#ffffff', paddingLeft: 5}}
               onChangeText={(text) => this.setState({description: text})}
               value={this.state.description}
+              placeholder="ex. necklace"
             />
             <Text style={{marginTop: 10}}>Quantity: </Text>
             <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.26, backgroundColor: '#ffffff'}}
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.26, backgroundColor: '#ffffff', paddingLeft: 5}}
               onChangeText={(text) => this.setState({quantity: text})}
               value={this.state.quantity}
             />
