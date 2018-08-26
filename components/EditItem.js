@@ -72,7 +72,6 @@ export default class EditItem extends React.Component {
                   quantity: this.state.quantity
                 }).then(() => {
                   Alert.alert("SAVED", "Inventory updated!");
-                  console.log("SAVED INVENTORY");
                 }).catch(err => {
                   Alert.alert(err.message);
                 })
@@ -96,7 +95,9 @@ export default class EditItem extends React.Component {
         doc.ref.delete().then(() => {
           const { navigate } = self.props.navigation;
 
-          navigate('Inventory');
+          navigate('Inventory', {mode: 'fromEditItem'});
+        }).catch(err => {
+          Alert.alert(err.message)
         })
       })
     }); 

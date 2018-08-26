@@ -63,11 +63,11 @@ export default class EnterSku extends React.Component {
 
                   Linking.openURL(urlL).then(() => {
                     navigate('Inventory');
-                  }).catch(err => console.log('There was an error:' + err));
+                  }).catch(err => Alert.alert('There was an error:' + err.message + ". Please try again."));
               });
           })
           .catch(function(error) {
-              console.log("Error getting documents: ", error);
+              Alert.alert(error.message);
           });
       }
       else {

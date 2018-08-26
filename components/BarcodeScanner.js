@@ -65,6 +65,9 @@ export default class BarcodeScanner extends React.Component {
       if (supported) {
         DeepLinking.evaluateUrl(url);
       }
+      else {
+        Alert.alert("You need to download and install the Square POS app from the App store.")
+      }
     });
   }
 
@@ -141,8 +144,9 @@ export default class BarcodeScanner extends React.Component {
     const { navigate } = this.props.navigation;
     price = "";
 
+    self = this;
+
     if(this.props.navigation.state.params.mode == "sell") {
-      self = this;
 
       firebase.firestore().collection("items").doc(this.state.user.email).collection('userItems').where("barcode", "==", `${data}`)
         .get()
@@ -181,18 +185,30 @@ export default class BarcodeScanner extends React.Component {
 
                 Linking.openURL(urlL).then(() => {
                   navigate('Inventory');
-                }).catch(err => console.log('There was an error:' + err));
+                }).catch(err => Alert.alert('There was an error:' + err.message + ". Please try again."));
             });
         })
         .catch(function(error) {
-            console.log("Error getting documents: ", error);
+            Alert.alert(error.message);
         });
     }
     else if(this.props.navigation.state.params.mode == "forSearch") {
       navigate('Inventory', { skuForSearch: `${data}`, mode: "forSearch" });
     }
     else {
-      navigate('EnterPrice', { forFromPrice: this.props.navigation.state.params.forFromPrice, onNavigateBack: this.props.navigation.state.params.onNavigateBack, data: data })
+
+      /*firebase.firestore().collection('items').get()
+        .then(snapshot => {
+          Alert.alert(JSON.stringify(snapshot._docs));
+          snapshot.forEach(doc => {
+            Alert.alert(doc.id, '=>', doc.data());
+          });
+        })
+        .catch(err => {
+          Alert.alert('Error getting documents', err);
+        });*/
+
+      navigate('EnterPrice', { forFromPrice: self.props.navigation.state.params.forFromPrice, onNavigateBack: self.props.navigation.state.params.onNavigateBack, data: data });
     }
   }
 }

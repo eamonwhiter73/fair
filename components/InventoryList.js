@@ -49,7 +49,7 @@ export default class InventoryList extends React.Component {
     querySnapshot.forEach((doc) => {
       const { barcode, description, email, price, quantity } = doc.data();
 
-      if(email == this.props.returnemail()) {
+      //if(email == this.state.user.email) {
         items.push({
           key: doc.id,
           doc, // DocumentSnapshot
@@ -59,11 +59,11 @@ export default class InventoryList extends React.Component {
           price,
           quantity
         });
-      }
+      //}
     })
 
     this.setState({ 
-      items,
+      items: items,
       loading: false
     })
 
@@ -72,7 +72,7 @@ export default class InventoryList extends React.Component {
   search = () => {
     var self = this;
 
-    this.refTwo.doc(this.state.user.email).collection('userItems').where("email", "==", this.state.user.email)
+    self.refTwo.doc(this.state.user.email).collection('userItems')
       .get()
       .then(function(querySnapshot) {
           var searchObjs = [];
@@ -118,7 +118,7 @@ export default class InventoryList extends React.Component {
         console.log(this.state.items);
       })
       .catch(function(error) {
-          console.log("Error getting documents: ", error);
+          Alert.alert(error.message);
       });
 
   }
@@ -151,7 +151,7 @@ export default class InventoryList extends React.Component {
           self.setState({items: items});
       })
       .catch(function(error) {
-          console.log("Error getting documents: ", error);
+          Alert.alert(error.message);
       });
   }
 
@@ -162,6 +162,12 @@ export default class InventoryList extends React.Component {
   componentWillReceiveProps(props) {
     console.log(props);
     this.setState({searchText: props.searchSku()});
+    if(this.state.items == [] && props.initialItem != null) {
+      this.setState({items: [props.initialItem]});
+    }
+    else if(props.removeInitialItem()) {
+      this.setState({items: []});
+    }
   }
 
   render() {

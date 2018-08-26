@@ -152,11 +152,11 @@ exports.updateItem = functions.firestore
 
 						//var body = new SquareConnect.V1AdjustInventoryRequest(); // V1AdjustInventoryRequest | An object containing the fields to POST for the request.  See the corresponding object definition for field details.
 						var delta = 0;
-						if(Number(newValue.quantity) > Number(previousValue.quantity)) {
-							delta = Number(newValue.quantity) - Number(previousValue.quantity);
+						if(parseInt(newValue.quantity) > parseInt(previousValue.quantity)) {
+							delta = parseInt(newValue.quantity) - parseInt(previousValue.quantity);
 						}
-						else if(Number(newValue.quantity) < Number(previousValue.quantity)) {
-							delta = -1*(Number(previousValue.quantity) - Number(newValue.quantity));
+						else if(parseInt(newValue.quantity) < parseInt(previousValue.quantity)) {
+							delta = -1*(parseInt(previousValue.quantity) - parseInt(newValue.quantity));
 						}
 						else {
 							delta = 0;

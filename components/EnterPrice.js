@@ -61,7 +61,7 @@ export default class EnterPrice extends React.Component {
 
         Linking.openURL(urlL).then(() => {
           navigate('Inventory');
-        }).catch(err => console.log('There was an error:' + err));
+        }).catch(err => Alert.alert('There was an error:' + err.message + ". Please try again."));
       }
       else {
         this.props.navigation.state.params.onNavigateBack(`${this.props.navigation.state.params.data}`);

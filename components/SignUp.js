@@ -26,7 +26,7 @@ export default class SignUp extends React.Component {
       firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
         navigate('Inventory');
       }).catch((error) => {
-        Alert.alert(error);
+        Alert.alert(error.message);
       });
     }
   }

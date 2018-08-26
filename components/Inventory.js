@@ -36,7 +36,7 @@ export default class Inventory extends React.Component {
                           navigation.navigate('LogIn');
                         })
                         .catch(err => {
-                          Alert.alert(err);
+                          Alert.alert(err.message);
                         })  
                       
                     }},
@@ -58,7 +58,10 @@ export default class Inventory extends React.Component {
     quantity: "",
     description: "",
     loading: true
-  }
+  };
+
+  initialItem = {};
+  removeInitialItem = false;
 
   leave = () => {
     
@@ -82,8 +85,74 @@ export default class Inventory extends React.Component {
     }
   }
 
+  getInitialItem = () => {
+    return this.initialItem;
+  }
+
   addItem() {
-    this.ref.doc(this.state.user.email).collection('userItems').add({
+
+    firebase.firestore().collection('items').doc(this.state.user.email).get()
+      .then(snapshot => {
+        if(!snapshot.exists) {
+          this.initialItem = {
+          //[this.state.user.email]: {
+            barcode: this.state.text,
+            description: this.state.description,
+            price: this.state.price,
+            quantity: this.state.quantity,
+            email: this.state.user.email
+          //}
+          }
+
+          this.setState({
+            text: "__",
+            price: "__",
+            quantity: "",
+            description: ""
+          });
+
+          this.ref.doc(this.state.user.email).collection('userItems').add(this.initialItem).catch(err => {
+            Alert.alert(err.message);
+          })
+        }
+
+        else {
+          firebase.firestore().collection('items').doc(this.state.user.email).collection('userItems').where("barcode", "==", this.state.text).get()
+            .then(snapshot => {
+              //Alert.alert(JSON.stringify(snapshot._docs));
+              if(snapshot._docs.length > 0) {
+                Alert.alert("The SKU already exists.");
+                return;
+              }
+
+              this.ref.doc(this.state.user.email).collection('userItems').add({
+              //[this.state.user.email]: {
+                barcode: this.state.text,
+                description: this.state.description,
+                price: this.state.price,
+                quantity: this.state.quantity,
+                email: this.state.user.email
+              //}
+              }).catch(err => {
+                Alert.alert(err.message);
+              })
+
+              this.setState({
+                text: "__",
+                price: "__",
+                quantity: "",
+                description: ""
+              });
+            })
+            .catch(err => {
+              Alert.alert(err.message);
+            });
+          } 
+      });
+
+    
+
+    /*this.ref.doc(this.state.user.email).collection('userItems').add({
       //[this.state.user.email]: {
         barcode: this.state.text,
         description: this.state.description,
@@ -91,14 +160,16 @@ export default class Inventory extends React.Component {
         quantity: this.state.quantity,
         email: this.state.user.email
       //}
-    });
+    }).catch(err => {
+      Alert.alert(err.message);
+    })
 
     this.setState({
       text: "__",
       price: "__",
       quantity: "",
       description: ""
-    });
+    });*/
   }
 
   submit = () => {
@@ -117,6 +188,19 @@ export default class Inventory extends React.Component {
 
       navigate('LogIn');
     }
+
+    this._sub = this.props.navigation.addListener(
+      'didFocus',
+      () => {
+        if(this.props.navigation.state.params.mode == 'fromEditItem') {
+          this.removeInitialItem = true;
+        }
+      }
+    );
+  }
+
+  getRemoveInitialItem = () => {
+    return this.removeInitialItem;
   }
 
   componentWillMount() {
@@ -143,24 +227,19 @@ export default class Inventory extends React.Component {
 
   myCallback = (item) => {
     console.log("myCallback getting called-----------------------");
-    if (this.state.user && item.email == this.state.user.email) {
-        console.log("email = email !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        return ( 
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <Text style={{marginTop: 10, flex: 0.8}}>SKU: {item.barcode} | Description: {item.description} | Quantity: {item.quantity} | Price: ${item.price}</Text>
-            <TouchableOpacity
-              style = {styles.editcontainer}
-              onPress={() => { 
-                this.edit(item)
-              }}>
-              <Text style = {styles.buttonTextAdjust}>EDIT</Text>
-            </TouchableOpacity>
-          </View>
-        )
-    }
-    else {
-      return null
-    }
+    console.log("email = email !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    return ( 
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <Text style={{marginTop: 10, flex: 0.8}}>SKU: {item.barcode} | Description: {item.description} | Quantity: {item.quantity} | Price: ${item.price}</Text>
+        <TouchableOpacity
+          style = {styles.editcontainer}
+          onPress={() => { 
+            this.edit(item)
+          }}>
+          <Text style = {styles.buttonTextAdjust}>EDIT</Text>
+        </TouchableOpacity>
+      </View>
+    )
   }
  
   returnEmail = () => {
@@ -230,6 +309,8 @@ export default class Inventory extends React.Component {
             returnemail={this.returnEmail}
             searchSku={this.searchSkuFunc.bind(this)}
             navigation={this.props.navigation.navigate}
+            initialItem={this.getInitialItem.bind(this)}
+            removeInitialItem={this.getRemoveInitialItem.bind(this)}
           />
         </View>
         <TouchableOpacity
