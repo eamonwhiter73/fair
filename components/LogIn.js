@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, Alert, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Alert, TouchableOpacity, Image, Animated } from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class LogIn extends React.Component {
@@ -14,7 +14,9 @@ export default class LogIn extends React.Component {
   state = {
     email: "",
     password: "",
-    loading: true
+    loading: true,
+    yPosition: new Animated.Value(0),  // Initial value for opacity: 0
+    fadeAnim: new Animated.Value(1)  // Initial value for opacity: 0
   };
 
   constructor() {
@@ -24,6 +26,16 @@ export default class LogIn extends React.Component {
 
   submitEdit = () => {
     const { navigate } = this.props.navigation;
+
+    Animated.timing(this.state.fadeAnim, {
+      toValue: 1,
+      duration: 1,
+    }).start();
+
+    Animated.timing(this.state.yPosition, {
+      toValue: 0,
+      duration: 1,
+    }).start();
 
     if(this.state.email == "") {
       Alert.alert("Please enter a valid email address, if you do not have an account please select the 'Sign Up' link below");
@@ -35,6 +47,20 @@ export default class LogIn extends React.Component {
         Alert.alert(err.message);
       });
     }
+  }
+
+  animateUp = () => {
+    console.log("animateUp");
+
+    Animated.timing(this.state.yPosition, {
+        toValue: -103,
+        duration: 300,
+    }).start();
+
+    Animated.timing(this.state.fadeAnim, {
+        toValue: 0,
+        duration: 1,
+    }).start();
   }
 
   componentDidMount() {
@@ -61,23 +87,26 @@ export default class LogIn extends React.Component {
     // The application is initialising
     if (this.state.loading) return null;
 
+    let { yPosition } = this.state;
+    let { fadeAnim } = this.state;
+
     return (
       <View style={{flex: 1, paddingHorizontal: 15, backgroundColor: '#ddeaff'}}>
         <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 50}}>
           <Image
             style={styles.stretch}
-            source={require('../assets/blogo1024.png')}
+            source={require('../assets/blogosplash200.png')}
           />
         </View>
-        <View style={{alignItems: 'center'}}>
+        <Animated.View style={{alignItems: 'center', opacity: fadeAnim}}>
           <Text style={{marginTop: 25, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Email: </Text>
           <TextInput
             style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
             onChangeText={(text) => this.setState({email: text})}
             value={this.state.email}
           />
-        </View>
-        <View style={{alignItems: 'center'}}>
+        </Animated.View>
+        <Animated.View style={{alignItems: 'center', marginTop: yPosition, position: 'relative'}}>
           <Text style={{marginTop: 15, fontFamily: 'American Typewriter', fontWeight: 'bold', color: '#518dff'}}>Password: </Text>
           <TextInput
             style={{width: 240, height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 15, backgroundColor: '#ffffff', borderRadius: 4, paddingLeft: 5}}
@@ -85,8 +114,9 @@ export default class LogIn extends React.Component {
             value={this.state.password}
             onSubmitEditing={this.submitEdit}
             secureTextEntry={true}
+            onFocus={this.animateUp}
           />
-        </View>
+        </Animated.View>
         <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 15}}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -120,7 +150,7 @@ const styles = StyleSheet.create ({
       backgroundColor: '#518dff',
    },
    stretch: {
-      width: 150,
-      height: 150,
+      width: 200,
+      height: 200,
    }
 })

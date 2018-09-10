@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
 import { Icon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 
@@ -57,7 +57,8 @@ export default class Inventory extends React.Component {
     price: "__",
     quantity: "",
     description: "",
-    loading: true
+    loading: true,
+    fadeAnim: new Animated.Value(0.2)
   };
 
   initialItem = {};
@@ -150,26 +151,10 @@ export default class Inventory extends React.Component {
           } 
       });
 
-    
-
-    /*this.ref.doc(this.state.user.email).collection('userItems').add({
-      //[this.state.user.email]: {
-        barcode: this.state.text,
-        description: this.state.description,
-        price: this.state.price,
-        quantity: this.state.quantity,
-        email: this.state.user.email
-      //}
-    }).catch(err => {
-      Alert.alert(err.message);
-    })
-
-    this.setState({
-      text: "__",
-      price: "__",
-      quantity: "",
-      description: ""
-    });*/
+    Animated.timing(this.state.fadeAnim, {
+      toValue: 0.2,
+      duration: 1,
+    }).start();
   }
 
   submit = () => {
@@ -194,6 +179,17 @@ export default class Inventory extends React.Component {
       () => {
         if(this.props.navigation.state.params.mode == 'fromEditItem') {
           this.removeInitialItem = true;
+        }
+        else if(this.props.navigation.state.params.mode == 'fromPrice') {
+          Animated.timing(this.state.fadeAnim, {
+            toValue: 0.2,
+            duration: 1,
+          }).start(() => {
+            Animated.timing(this.state.fadeAnim, {
+              toValue: 1,
+              duration: 500,
+            }).start();
+          });
         }
       }
     );
@@ -298,6 +294,8 @@ export default class Inventory extends React.Component {
   render() {
     // The application is initialising
     if (this.state.loading) return null;
+    
+    let { fadeAnim } = this.state;
 
     return (
       <View style={{paddingTop: 15, paddingHorizontal: 15, paddingBottom: 15, flex: 1, backgroundColor: "#fff"}}>
@@ -314,22 +312,24 @@ export default class Inventory extends React.Component {
           >
             <Text style = {styles.button}>SCAN ITEM</Text>
           </TouchableOpacity>
-          <Text style={{}}>{'\n'}SKU: {this.state.text} | Price: ${this.state.price}{"\n"}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{marginTop: 10}}>Description: </Text>
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.74, marginRight: 15, backgroundColor: '#ffffff', paddingLeft: 5}}
-              onChangeText={(text) => this.setState({description: text})}
-              value={this.state.description}
-              placeholder="ex. necklace"
-            />
-            <Text style={{marginTop: 10}}>Quantity: </Text>
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.26, backgroundColor: '#ffffff', paddingLeft: 5}}
-              onChangeText={(text) => this.setState({quantity: text})}
-              value={this.state.quantity}
-            />
-          </View>
+          <Animated.View style={{opacity: fadeAnim}}>
+            <Text style={{}}>{'\n'}SKU: {this.state.text} | Price: ${this.state.price}{"\n"}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{marginTop: 10}}>Description: </Text>
+              <TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.74, marginRight: 15, backgroundColor: '#ffffff', paddingLeft: 5}}
+                onChangeText={(text) => this.setState({description: text})}
+                value={this.state.description}
+                placeholder="ex. necklace"
+              />
+              <Text style={{marginTop: 10}}>Quantity: </Text>
+              <TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, flex: 0.26, backgroundColor: '#ffffff', paddingLeft: 5}}
+                onChangeText={(text) => this.setState({quantity: text})}
+                value={this.state.quantity}
+              />
+            </View>
+          </Animated.View>
           <View style={{paddingTop: 15}}>
             <TouchableOpacity
               style = {styles.container}
