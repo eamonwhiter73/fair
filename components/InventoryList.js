@@ -201,6 +201,9 @@ export default class InventoryList extends React.Component {
             <Text style = {styles.buttonEdit}>SCAN</Text>
           </TouchableOpacity>
         </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{fontWeight: 'bold', fontSize: 10, flex: 1, textAlign: 'center', marginTop: 10}}>TAP ITEM TO SELL</Text>
+        </View>
         <FlatList
           style={{paddingBottom: 1}}
           data={this.state.items}

@@ -17,19 +17,29 @@
 	$data = curl_exec($ch);
 	curl_close($ch);
 
-	//error_log($data);
+	//error_log("transactions: ".$data);
 
 	$array = json_decode($data, true);
 	$timestamp = $array['transaction']['created_at'];
 	$location_id = $array['transaction']['location_id'];
 
 	$date = new DateTime($timestamp);
-	$date->add(new DateInterval("PT1S"));
+	$date->add(new DateInterval("PT5S")); //FIX THIS SO THAT IT WORKS WITH BELOW TO PARSE THROUGH ALL THINGS
 
 	//error_log($timestamp);
 	//error_log($location_id);
 
-	$ch1 = curl_init("https://connect.squareup.com/v1/".$location_id."/payments?begin_time=".rawurlencode($timestamp)."&end_time=".rawurlencode($date->format(DateTime::ATOM)));
+	$BaseURL = 'http://example.com/page.php';
+	$Query   = http_build_query(array(
+	    'start-max'=>'2010-09-02T10:25:58+01:00',
+	    'param2'=>'anotherval',
+	));
+
+	$URL = $BaseURL.'?'.$Query;
+
+	//error_log("https://connect.squareup.com/v1/JN6S37JH6M1Z2/payments?begin_time"."=".urlencode($timestamp)."&end_time"."=".urlencode($date->format(DateTime::ATOM)));
+
+	$ch1 = curl_init("https://connect.squareup.com/v1/".$location_id."/payments?begin_time"."=".urlencode($timestamp)."&end_time"."=".urlencode($date->format(DateTime::ATOM)));
 
 	curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch1, CURLOPT_HEADER, 0);
@@ -38,7 +48,7 @@
 	$data1 = curl_exec($ch1);
 	curl_close($ch1);
 
-	//error_log($data1);
+	//error_log("Data initial: ".$data1);
 
 	/*THIS NEEDS TO WORK WHEN MULTIPLE SALES HAPPEN IN THE SAME SECOND - PARSE THROUGH AND CHECK ALL PAYMENT TENDER IDS AGAINST TRANSACTION TENDER IDS*/
 	
@@ -49,6 +59,9 @@
 	$pieces = explode("/", $array1[0]['itemizations'][0]['notes']);
 	$sku = $pieces[0];
 	$email = $pieces[1];
+
+	//error_log($sku." : SKU");
+	//error_log($email." : EMAIL");
 
 	if($transactionTenderId == $paymentTenderId) {
 

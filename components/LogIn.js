@@ -66,7 +66,7 @@ export default class LogIn extends React.Component {
         <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 50}}>
           <Image
             style={styles.stretch}
-            source={require('../assets/fairstarter.png')}
+            source={require('../assets/blogo1024.png')}
           />
         </View>
         <View style={{alignItems: 'center'}}>

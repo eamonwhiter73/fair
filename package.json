@@ -24,7 +24,7 @@
     "fbjs": "^0.8.17",
     "react": "^16.3.2",
     "react-native": "^0.55.4",
-    "react-native-camera": "^1.2.0",
+    "react-native-camera": "git+https://git@github.com/SimonErm/react-native-camera#fix/multipleOutputOfSameType",
     "react-native-deep-linking": "^2.1.0",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^4.3.6",

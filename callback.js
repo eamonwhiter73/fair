@@ -40,7 +40,11 @@ $(document).ready(function() {
 		  alert(errorMessage);
 	});
 
+	var firestoreSettings = { timestampsInSnapshots: true };
+
 	var db = firebase.firestore();
+
+	db.settings(firestoreSettings);
 
 	printResponse();
 
@@ -76,7 +80,7 @@ $(document).ready(function() {
 	  }
 
 	  if (transactionId in transactionInfo) {
-	  	//alert(transactionInfo[transactionId]);
+	  	//alert(JSON.stringify(transactionInfo));
 	    
 	    //resultString += "Transaction Info: " + transactionInfo[transactionId] + "<br>";
 
@@ -99,14 +103,19 @@ $(document).ready(function() {
 
 		    	if(json.data == "Manual sale") {
 		    		alert("Manual sale complete! Return to Fairstarter!");
+
+		    		$(".loader_container").hide();
+		    		window.location.href = './complete.html';
 		    		return;
 		    	}
 
+		    	//alert(json.email);
+
 		    	var quant = 0;
 		    	var itemsRef = db.collection('items').doc(json.email).collection('userItems');
-				var query = itemsRef.where('barcode', '==', String(json.data)).get()
+				var query = itemsRef.where('barcode', '==', json.data).get()
 				    .then(snapshot => {
-				      //console.log(JSON.stringify(snapshot, getCircularReplacer()) + " snapshot");
+				      //alert("Entered snapshot block");
 
 				      snapshot.forEach(doc => {
 				        quant = Number(doc.data().quantity);
@@ -117,7 +126,9 @@ $(document).ready(function() {
 						    quantity: newVal
 						})
 						.then(function() {
+							$(".loader_container").hide();
 						    alert("Quantity successfully updated! Please return to Fairstarter!");
+						    window.location.href = './complete.html';
 						})
 						.catch(function(error) {
 						    alert("Error writing document: ", error);
@@ -128,6 +139,8 @@ $(document).ready(function() {
 				      alert('Error getting documents ' + JSON.stringify(err));
 				    });
 
+		    }).catch(err => {
+		    	alert(err.message);
 		    })
 		  }
 		  else {
@@ -155,9 +168,11 @@ $(document).ready(function() {
 	    resultString += "Error: " + JSON.stringify(transactionInfo[errorField])+ "<br>";
 
 	    if(transactionInfo[errorField] == "not_logged_in") {
+	    	$(".loader_container").hide();
 	    	alert("Please open the Square POS app and login, and then return to Fairstarter and redo the transaction.");
 	    }
 	    else if(transactionInfo[errorField] == "payment_canceled") {
+	    	$(".loader_container").hide();
 	    	alert("Transaction cancelled. Please return to Fairstarter to initiate another transaction.");
 	    }
 	  }

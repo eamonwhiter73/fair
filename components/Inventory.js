@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, Linking } from 'react-native';
 import { Icon } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 
@@ -91,7 +91,7 @@ export default class Inventory extends React.Component {
 
   addItem() {
 
-    firebase.firestore().collection('items').doc(this.state.user.email).get()
+    firebase.firestore().collection('items').doc(this.state.user.email).collection('userItems').get()
       .then(snapshot => {
         if(!snapshot.exists) {
           this.initialItem = {
@@ -229,8 +229,44 @@ export default class Inventory extends React.Component {
     console.log("myCallback getting called-----------------------");
     console.log("email = email !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     return ( 
-      <View style={{flex: 1, flexDirection: 'row'}}>
-        <Text style={{marginTop: 10, flex: 0.8}}>SKU: {item.barcode} | Description: {item.description} | Quantity: {item.quantity} | Price: ${item.price}</Text>
+      <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ddeaff', paddingBottom: 10, marginTop: 10, borderColor: '#518dff', borderBottomWidth: 1, borderStyle: 'solid'}}>
+        <Text style={{marginTop: 10, marginLeft: 10, flex: 0.8}}
+              onPress={() => {
+
+                dataParameter = {
+                  amount_money: {
+                    amount: Number(item.price) * 100,
+                    currency_code: "USD",
+                  },
+
+                  // Replace this value with your application's callback URL
+                  callback_url: "https://fairstarter.eamondev.com/callback.html",
+
+                  // Replace this value with your application's ID
+                  client_id: "sq0idp-vHgDfd4SSLvkgAqfjZpwEg",
+
+                  version: "1.3",
+                  notes: item.barcode+"/"+item.email,
+                  options: {
+                    supported_tender_types: ["CREDIT_CARD","CASH","OTHER","SQUARE_GIFT_CARD","CARD_ON_FILE"],
+                  }
+                };
+
+                var urlL = "";
+                
+                if(Platform.OS === 'ios') {
+                  urlL = "square-commerce-v1://payment/create?data=" + encodeURIComponent(JSON.stringify(dataParameter));
+                }
+                else {
+                  urlL = "square-commerce-v1://payment/"+Number(item.price)*100+"/"+item.barcode+"/"+item.email;
+                }
+
+                Linking.openURL(urlL).catch(err => Alert.alert('There was an error:' + err.message + ". Please try again."));
+                      
+              }}
+        >
+          SKU: {item.barcode} | Description: {item.description} | Quantity: {item.quantity} | Price: ${item.price}
+        </Text>
         <TouchableOpacity
           style = {styles.editcontainer}
           onPress={() => { 
@@ -272,9 +308,9 @@ export default class Inventory extends React.Component {
               const { navigate } = this.props.navigation;
 
               if(this.state.text != null) {
-                navigate('BarcodeScanner', { onNavigateBack: this.changeData.bind(this), forFromPrice: this.changePrice.bind(this), mode: 'forScanAdd' })}
+                navigate('BarcodeScanner', { onNavigateBack: this.changeData.bind(this), forFromPrice: this.changePrice.bind(this), mode: 'forScanAdd' });
               }
-            }
+            }}
           >
             <Text style = {styles.button}>SCAN ITEM</Text>
           </TouchableOpacity>
@@ -362,13 +398,14 @@ const styles = StyleSheet.create ({
    },
    buttonTextAdjust: {
       borderWidth: 1,
+      marginRight: 10,
       padding: 10,
       borderColor: '#357aff',
       borderRadius: 4,
       flex: 1,
       textAlign: 'center',
       color: '#518dff',
-      backgroundColor: '#ddeaff',
+      backgroundColor: '#c9deff',
       fontFamily: 'American Typewriter',
    },
 })
